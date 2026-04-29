@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanctuary 02 — Deserto di Empusa | Rapporto Operativo 25.04.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #c8a96e;
+    --rust: #b85c2a;
+    --blood: #8b1a1a;
+    --ash: #2a2520;
+    --dust: #1a1610;
+    --smoke: #3d3830;
+    --bone: #e8d5a3;
+    --pale: #f5ead0;
+    --toxic: #7ab648;
+    --toxic-dim: #3d5c24;
+    --warn: #d4820a;
+    --alert: #cc3333;
+    --muted: #7a7060;
+    --panel: rgba(40,35,28,0.92);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dust);
+    color: var(--bone);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    min-height: 100vh;
+  }
+
+  /* Grain texture overlay */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0.5;
+  }
+
+  /* Scanline */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .dashboard {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+  }
+
+  /* HEADER */
+  .header {
+    border: 1px solid var(--sand);
+    border-bottom: 3px solid var(--rust);
+    padding: 20px 24px 16px;
+    margin-bottom: 16px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(184,92,42,0.15) 0%, transparent 60%);
+    animation: fadeIn 0.6s ease both;
+  }
+  .header::before {
+    content: '◈ SANCTUARY 02 — RAPPORTO OPERATIVO POST-AZIONE ◈';
+    position: absolute;
+    top: -9px; left: 20px;
+    background: var(--dust);
+    padding: 0 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--rust);
+    letter-spacing: 3px;
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .header-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: var(--sand);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .header-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .header-meta {
+    text-align: right;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 2;
+  }
+  .header-meta span { color: var(--sand); }
+
+  /* TICKER */
+  .ticker-wrap {
+    border: 1px solid var(--smoke);
+    border-top: 2px solid var(--rust);
+    overflow: hidden;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s 0.1s ease both;
+  }
+  .ticker-inner { display: flex; align-items: center; height: 30px; }
+  .ticker-label {
+    background: var(--rust);
+    color: var(--dust);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 0 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+  .ticker-scroll { overflow: hidden; flex: 1; }
+  .ticker-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    display: inline-block;
+    animation: ticker 40s linear infinite;
+    padding-left: 100%;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* STAT CARDS */
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s 0.2s ease both;
+  }
+  .stat-card {
+    border: 1px solid var(--smoke);
+    padding: 12px 14px;
+    background: var(--panel);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--sand); }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .stat-card.green::after { background: var(--toxic); }
+  .stat-card.warn::after  { background: var(--warn); }
+  .stat-card.red::after   { background: var(--alert); }
+  .stat-card.sand::after  { background: var(--sand); }
+  .stat-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; line-height: 1; }
+  .stat-card.green .stat-value { color: var(--toxic); }
+  .stat-card.warn  .stat-value { color: var(--warn); }
+  .stat-card.red   .stat-value { color: var(--alert); }
+  .stat-card.sand  .stat-value { color: var(--sand); }
+  .stat-detail { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* PANELS */
+  .panel {
+    border: 1px solid var(--smoke);
+    background: var(--panel);
+    padding: 16px 18px;
+    position: relative;
+    animation: fadeIn 0.6s ease both;
+  }
+  .panel-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid-3  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .full    { margin-bottom: 12px; }
+
+  /* CONDIZIONI OPERATIVE */
+  .thermal-indicator { display: flex; align-items: center; gap: 10px; padding: 6px 0; margin-bottom: 10px; }
+  .thermal-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; min-width: 100px; }
+  .thermal-boxes { display: flex; gap: 3px; }
+  .thermal-box { width: 16px; height: 16px; border: 1px solid var(--smoke); }
+  .thermal-box.active { background: var(--alert); border-color: var(--alert); }
+  .thermal-box.warn   { background: var(--warn);  border-color: var(--warn); }
+  .thermal-box.ok     { background: var(--toxic); border-color: var(--toxic); }
+  .thermal-note { font-size: 12px; color: var(--muted); }
+
+  .threat-bar-wrap { margin-bottom: 10px; }
+  .threat-label-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .threat-label-row .tl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+  .threat-label-row .tv { font-size: 11px; color: var(--sand); font-weight: 600; }
+  .threat-track { height: 5px; background: var(--smoke); }
+  .threat-fill  { height: 100%; }
+  .threat-fill.red  { background: var(--alert); width: 82%; }
+  .threat-fill.warn { background: var(--warn);  width: 90%; }
+  .threat-fill.sand { background: var(--sand);  width: 22%; }
+
+  /* SQUADRE */
+  .squad-list { display: flex; flex-direction: column; gap: 8px; }
+  .squad-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--smoke); transition: border-color 0.2s, background 0.2s; }
+  .squad-item:hover { border-color: var(--sand); background: rgba(200,169,110,0.06); }
+  .squad-num { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--rust); line-height: 1; min-width: 24px; }
+  .squad-info { flex: 1; }
+  .squad-name { font-weight: 600; font-size: 14px; color: var(--sand); letter-spacing: 1px; }
+  .squad-loc  { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); margin: 2px 0 4px; }
+  .squad-desc { font-size: 12px; color: var(--bone); line-height: 1.4; }
+  .squad-status { font-family: 'Share Tech Mono', monospace; font-size: 9px; padding: 2px 7px; border: 1px solid; align-self: flex-start; white-space: nowrap; letter-spacing: 1px; }
+  .status-ok   { color: var(--toxic); border-color: var(--toxic-dim); }
+  .status-warn { color: var(--warn);  border-color: #6b4105; }
+  .status-crit { color: var(--alert); border-color: #661a1a; }
+
+  /* SCOPERTE */
+  .discovery-list { display: flex; flex-direction: column; gap: 8px; }
+  .discovery { display: flex; gap: 12px; padding: 10px; border: 1px solid var(--smoke); align-items: flex-start; transition: border-color 0.2s; }
+  .discovery:hover { border-color: var(--rust); }
+  .disc-icon { font-family: 'Share Tech Mono', monospace; font-size: 20px; color: var(--rust); min-width: 22px; line-height: 1; margin-top: 1px; }
+  .disc-title { font-weight: 600; font-size: 13px; color: var(--sand); margin-bottom: 3px; }
+  .disc-text  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* PERSONAGGI */
+  .char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .char-card { padding: 10px 12px; border: 1px solid var(--smoke); position: relative; overflow: hidden; transition: border-color 0.2s; }
+  .char-card:hover { border-color: var(--sand); }
+  .char-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .char-card.ally::before    { background: var(--toxic); }
+  .char-card.neutral::before { background: var(--warn); }
+  .char-card.hostile::before { background: var(--alert); }
+  .char-name  { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; color: var(--sand); }
+  .char-role  { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .char-offer { font-size: 12px; color: var(--bone); line-height: 1.4; }
+  .char-badge { display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: 8px; padding: 2px 6px; margin-bottom: 5px; letter-spacing: 1px; border: 1px solid; }
+  .char-card.ally    .char-badge { color: var(--toxic); border-color: var(--toxic-dim); }
+  .char-card.neutral .char-badge { color: var(--warn);  border-color: #6b4105; }
+  .char-card.hostile .char-badge { color: var(--alert); border-color: #661a1a; }
+
+  /* CONTRATTI */
+  .contract-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .contract-card { padding: 14px 16px; border: 1px solid var(--smoke); }
+  .contract-card.pro  { border-top: 3px solid var(--toxic); }
+  .contract-card.corp { border-top: 3px solid var(--alert); }
+  .contract-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .contract-card.pro  .contract-name { color: var(--toxic); }
+  .contract-card.corp .contract-name { color: var(--alert); }
+  .contract-row { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .contract-row .lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); min-width: 85px; letter-spacing: 1px; margin-top: 2px; }
+  .contract-row .val { color: var(--bone); flex: 1; }
+  .consequence { margin-top: 10px; padding: 8px 10px; font-size: 12px; font-style: italic; border-left: 2px solid; color: var(--muted); line-height: 1.4; }
+  .contract-card.pro  .consequence { border-color: var(--toxic); }
+  .contract-card.corp .consequence { border-color: var(--alert); }
+
+  /* ASSET */
+  .asset-list { display: flex; flex-direction: column; gap: 6px; }
+  .asset-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--smoke); font-size: 13px; transition: border-color 0.2s; }
+  .asset-item:hover { border-color: var(--sand); }
+  .asset-dot  { width: 7px; height: 7px; background: var(--sand); flex-shrink: 0; }
+  .asset-name { color: var(--bone); flex: 1; }
+  .asset-tier { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--toxic); border: 1px solid var(--toxic-dim); padding: 2px 6px; letter-spacing: 1px; }
+
+  /* PRIORITÀ */
+  .priority-list { display: flex; flex-direction: column; gap: 6px; }
+  .priority-item { display: flex; gap: 12px; padding: 9px 12px; border: 1px solid var(--smoke); align-items: center; transition: border-color 0.2s, background 0.2s; }
+  .priority-item:hover { border-color: var(--sand); background: rgba(200,169,110,0.04); }
+  .prio-num { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--rust); min-width: 20px; line-height: 1; }
+  .prio-text { font-size: 13px; color: var(--bone); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 20px;
+    padding: 12px 0;
+    border-top: 1px solid var(--smoke);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .panel:nth-child(1) { animation-delay: 0.1s; }
+  .panel:nth-child(2) { animation-delay: 0.2s; }
+  .panel:nth-child(3) { animation-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .contract-grid, .char-grid { grid-template-columns: 1fr; }
+    .status-bar { grid-template-columns: 1fr 1fr; }
+    .header-meta { display: none; }
+    .header-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-title">Deserto di Empusa</div>
+        <div class="header-sub">MISSIONE "SETE NEL DESERTO" ◈ RAPPORTO OPERATIVO POST-AZIONE ◈ SALVAGE UNION</div>
+      </div>
+      <div class="header-meta">
+        DATA: <span>25.04.2026</span><br>
+        TEATRO: <span>03.xx EMPUSA</span><br>
+        SQUADRE: <span>4 / 4 RIENTRATE</span><br>
+        STATO: <span style="color:var(--warn)">MISSIONE APERTA</span><br>
+        CRAWLER: <span>SANCTUARY 02</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <div class="ticker-label">▶ INTEL LIVE</div>
+      <div class="ticker-scroll">
+        <div class="ticker-text">
+          BATTERI IDROFAGI CONFERMATI NELL'OASI [03.01] — POSSIBILE SABOTAGGIO CORPORATIVO ◈ PATTUGLIE HUSSAR CONTOUR ATTIVE IN TUTTO IL DESERTO — MASSIMA ATTENZIONE ◈ NICHOLAS SANDIVAL [03.06] — ALLEANZA CONFERMATA, MECH T5/T6 DISPONIBILE ◈ DUE CONTRATTI INCOMPATIBILI APERTI — DECISIONE URGENTE RICHIESTA ◈ MODULO "BELLA ADDORMENTATA" RECUPERATO — NATURA IGNOTA, ANALISI IN CORSO ◈ 3 MECH SQUADRA 3 IN RIPARAZIONE ◈ 6 HUSSAR CONTOUR NEUTRALIZZATI — TELAIO RECUPERATO ◈
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="status-bar">
+    <div class="stat-card sand">
+      <div class="stat-label">SQUADRE OP.</div>
+      <div class="stat-value">4</div>
+      <div class="stat-detail">Tutte rientrate alla base</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">MECH DANNEG.</div>
+      <div class="stat-value">3</div>
+      <div class="stat-detail">Squadra 3 — danni gravi</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">HUSSAR NEUTR.</div>
+      <div class="stat-value">6</div>
+      <div class="stat-detail">+1 telaio recuperato</div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-label">CONTRATTI APERTI</div>
+      <div class="stat-value">2</div>
+      <div class="stat-detail">Incompatibili — scegliere</div>
+    </div>
+  </div>
+
+  <!-- CONDIZIONI OPERATIVE -->
+  <div class="panel full">
+    <div class="panel-title">◈ CONDIZIONI OPERATIVE — DESERTO DI EMPUSA</div>
+    <div class="thermal-indicator">
+      <div class="thermal-label">LIMITE TERMICO</div>
+      <div class="thermal-boxes">
+        <div class="thermal-box active"></div>
+        <div class="thermal-box active"></div>
+        <div class="thermal-box warn"></div>
+        <div class="thermal-box warn"></div>
+        <div class="thermal-box ok"></div>
+        <div class="thermal-box ok"></div>
+        <div class="thermal-box ok"></div>
+        <div class="thermal-box ok"></div>
+      </div>
+      <div class="thermal-note">&nbsp;−2 livelli (temperature ambientali estreme)</div>
+    </div>
+    <div class="threat-bar-wrap">
+      <div class="threat-label-row"><span class="tl">PRESSIONE MILITARE CONTOUR</span><span class="tv">ALTA — 82%</span></div>
+      <div class="threat-track"><div class="threat-fill red"></div></div>
+    </div>
+    <div class="threat-bar-wrap">
+      <div class="threat-label-row"><span class="tl">CRISI IDRICA REGIONALE</span><span class="tv">CRITICA — 90%</span></div>
+      <div class="threat-track"><div class="threat-fill warn"></div></div>
+    </div>
+    <div class="threat-bar-wrap">
+      <div class="threat-label-row"><span class="tl">COPERTURA ALLEATI CONFERMATI</span><span class="tv">BASSA — 22%</span></div>
+      <div class="threat-track"><div class="threat-fill sand"></div></div>
+    </div>
+  </div>
+
+  <!-- SQUADRE + SCOPERTE -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">◈ RAPPORTO SQUADRE</div>
+      <div class="squad-list">
+        <div class="squad-item">
+          <div class="squad-num">1</div>
+          <div class="squad-info">
+            <div class="squad-name">Oasi Prosciugata</div>
+            <div class="squad-loc">[03.01] — Esplorazione</div>
+            <div class="squad-desc">Insediamento abbandonato. Insetti neutralizzati. Barili BIOHAZARD con batteri idrofagi trovati nel pozzo asciutto.</div>
+          </div>
+          <div class="squad-status status-ok">RIENTRATA</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">2</div>
+          <div class="squad-info">
+            <div class="squad-name">Arcolog + Avamposto</div>
+            <div class="squad-loc">[03.02] [03.05] — Diplomatica</div>
+            <div class="squad-desc">Due contratti ricevuti da Nara Mash e Cerys. Nessun combattimento. Decisione aperta e urgente.</div>
+          </div>
+          <div class="squad-status status-warn">CONTRATTO APERTO</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">3</div>
+          <div class="squad-info">
+            <div class="squad-name">Avamposto Mercantile</div>
+            <div class="squad-loc">[03.05] — Combattimento</div>
+            <div class="squad-desc">Due scontri critici con pattuglie Hussar. Tre mech su cinque gravemente danneggiati. Salvati dall'intervento della 4ª squadra.</div>
+          </div>
+          <div class="squad-status status-crit">DANNI GRAVI</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">4</div>
+          <div class="squad-info">
+            <div class="squad-name">Pilota in Pensione</div>
+            <div class="squad-loc">[03.06] — Recupero + Supporto</div>
+            <div class="squad-desc">Sandival contattato e alleato. Doppio intervento a supporto della 3ª. 6 Hussar neutralizzati. Asset recuperati.</div>
+          </div>
+          <div class="squad-status status-ok">SUCCESSO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">◈ SCOPERTE PRINCIPALI</div>
+      <div class="discovery-list">
+        <div class="discovery">
+          <div class="disc-icon">☣</div>
+          <div>
+            <div class="disc-title">Sabotaggio idrico confermato</div>
+            <div class="disc-text">Barili biohazard con batteri idrofagi sul fondo del pozzo. La siccità dell'Oasi [03.01] non è naturale. Qualcuno ha deliberatamente eliminato le riserve d'acqua. Principale indiziato: corporazione Contour.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">⚡</div>
+          <div>
+            <div class="disc-title">Guerra per l'acqua in corso</div>
+            <div class="disc-text">L'Avamposto Mercantile è l'ultimo nodo idrico indipendente del deserto. Contour esercita pressione militare e diplomatica simultaneamente per acquisirlo.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">◆</div>
+          <div>
+            <div class="disc-title">Alleato trovato: Sandival</div>
+            <div class="disc-text">Pilota veterano con officina T3 e mech superiore a T5. Combattente affidabile, già testato sul campo. Risorsa rara — da consolidare.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">⚠</div>
+          <div>
+            <div class="disc-title">Contour presidia il territorio</div>
+            <div class="disc-text">Pattuglie Hussar numerose e aggressive in tutto il Deserto di Empusa. Traversata ad alto rischio senza adeguata copertura o ricognizione.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONAGGI -->
+  <div class="panel full">
+    <div class="panel-title">◈ PERSONAGGI INCONTRATI</div>
+    <div class="char-grid">
+      <div class="char-card ally">
+        <div class="char-badge">✅ ALLEATO ATTIVO</div>
+        <div class="char-name">Nicholas Sandival</div>
+        <div class="char-role">Pilota veterano indipendente — [03.06] Canyon</div>
+        <div class="char-offer">Officina meccanica autosufficiente T3. Mech con tecnologia T5/T6. Intervento volontario in combattimento per due volte a supporto della 3ª Squadra. Disponibile a scambi: rottami T3 in cambio di assistenza tecnica.</div>
+      </div>
+      <div class="char-card neutral">
+        <div class="char-badge">🟡 CONTRATTO APERTO</div>
+        <div class="char-name">Cerys</div>
+        <div class="char-role">Braccio destro di Colton — Avamposto Mercantile [03.05]</div>
+        <div class="char-offer">Figura operativa dell'avamposto. Si muove con guardie armate. Offre 30 rottami T2 + acqua gratuita per il Crawler in cambio dell'eliminazione dei mech Contour alle Colline Selvagge. Difende l'indipendenza dell'avamposto.</div>
+      </div>
+      <div class="char-card hostile">
+        <div class="char-badge">🔴 OSTILE — INTERESSI OPPOSTI</div>
+        <div class="char-name">Nara Mash</div>
+        <div class="char-role">Ufficiale Corporazione Contour — Arcolog [03.02]</div>
+        <div class="char-offer">Proposta riservata non ufficiale: eliminare Cerys per facilitare il takeover dell'Avamposto. Ricompensa: almeno 30 rottami T3. Accettare significherebbe consegnare il monopolio idrico della regione a Contour.</div>
+      </div>
+      <div class="char-card neutral">
+        <div class="char-badge">⚪ NEUTRO — NON INCONTRATO</div>
+        <div class="char-name">Colton</div>
+        <div class="char-role">Responsabile Avamposto Mercantile [03.05]</div>
+        <div class="char-offer">Gestore ufficiale dell'Avamposto. Non incontrato direttamente dalle squadre — tutte le trattative sono passate attraverso Cerys. Il suo reale grado di controllo sull'avamposto è ancora da determinare.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRATTI -->
+  <div class="panel full">
+    <div class="panel-title">◈ CONTRATTI APERTI — DECISIONE RICHIESTA — I DUE SONO INCOMPATIBILI</div>
+    <div class="contract-grid">
+      <div class="contract-card pro">
+        <div class="contract-name">CONTRATTO CERYS</div>
+        <div class="contract-row"><span class="lbl">CLIENTE</span><span class="val">Avamposto Mercantile (indipendente) — Cerys</span></div>
+        <div class="contract-row"><span class="lbl">OBIETTIVO</span><span class="val">Eliminare i mech Contour presso le Colline Selvagge</span></div>
+        <div class="contract-row"><span class="lbl">RICOMPENSA</span><span class="val">30 rottami T2 + acqua gratuita per l'intero Crawler (valore base: 2 T1 a persona)</span></div>
+        <div class="consequence">Conseguenza: l'Avamposto rimane indipendente. Contour perde influenza nella regione. L'acqua rimane accessibile a Sanctuary.</div>
+      </div>
+      <div class="contract-card corp">
+        <div class="contract-name">CONTRATTO NARA MASH</div>
+        <div class="contract-row"><span class="lbl">CLIENTE</span><span class="val">Corporazione Contour — Nara Mash (non ufficiale)</span></div>
+        <div class="contract-row"><span class="lbl">OBIETTIVO</span><span class="val">Eliminare Cerys, braccio destro di Colton</span></div>
+        <div class="contract-row"><span class="lbl">RICOMPENSA</span><span class="val">Almeno 30 rottami T3</span></div>
+        <div class="consequence">Conseguenza: Contour acquisisce l'Avamposto Mercantile. Monopolio idrico corporativo sull'intera regione. Costo dell'acqua per Sanctuary potenzialmente illimitato e incontrollabile.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSET + PRIORITÀ -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">◈ ASSET RECUPERATI</div>
+      <div class="asset-list">
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">Telaio Hussar (Contour, neutralizzato)</div>
+          <div class="asset-tier">MECH</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">Unità Dilaniatore M2-X</div>
+          <div class="asset-tier">MECH</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot" style="background:var(--alert)"></div>
+          <div class="asset-name">Modulo "Bella Addormentata"</div>
+          <div class="asset-tier" style="color:var(--alert);border-color:#661a1a">IGNOTO</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot" style="background:var(--toxic)"></div>
+          <div class="asset-name">Rottami classificazione mista</div>
+          <div class="asset-tier">T2 / T3</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">◈ PRIORITÀ PROSSIMA SESSIONE</div>
+      <div class="priority-list">
+        <div class="priority-item">
+          <div class="prio-num">1</div>
+          <div class="prio-text">Decidere il contratto — Cerys o Nara Mash (o esplorare una terza via)</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">2</div>
+          <div class="prio-text">Investigare l'origine dei batteri idrofagi e il mandante del sabotaggio idrico</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">3</div>
+          <div class="prio-text">Consolidare la relazione con Nicholas Sandival [03.06]</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">4</div>
+          <div class="prio-text">Analizzare il modulo "Bella Addormentata" — natura e funzione ignote</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>SANCTUARY 02 ◈ SALVAGE UNION ◈ SESSIONE 25.04.2026</span>
+    <span>TEATRO: DESERTO DI EMPUSA ◈ DOCUMENTO RISERVATO</span>
+  </div>
+
+</div>
+</body>
+</html>
