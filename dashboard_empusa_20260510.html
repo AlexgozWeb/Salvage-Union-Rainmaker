@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanctuary 02 — Deserto di Empusa | Rapporto Operativo 10.05.2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow+Condensed:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --sand: #c8a96e;
+    --rust: #b85c2a;
+    --blood: #8b1a1a;
+    --ash: #2a2520;
+    --dust: #1a1610;
+    --smoke: #3d3830;
+    --bone: #e8d5a3;
+    --pale: #f5ead0;
+    --toxic: #7ab648;
+    --toxic-dim: #3d5c24;
+    --warn: #d4820a;
+    --alert: #cc3333;
+    --muted: #7a7060;
+    --panel: rgba(40,35,28,0.92);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--dust);
+    color: var(--bone);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 14px;
+    line-height: 1.4;
+    min-height: 100vh;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 99;
+    opacity: 0.5;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.06) 2px, rgba(0,0,0,0.06) 4px);
+    pointer-events: none;
+    z-index: 100;
+  }
+
+  .dashboard {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+  }
+
+  /* HEADER */
+  .header {
+    border: 1px solid var(--sand);
+    border-bottom: 3px solid var(--rust);
+    padding: 20px 24px 16px;
+    margin-bottom: 16px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(184,92,42,0.15) 0%, transparent 60%);
+    animation: fadeIn 0.6s ease both;
+  }
+  .header::before {
+    content: '◈ SANCTUARY 02 — RAPPORTO OPERATIVO POST-AZIONE ◈';
+    position: absolute;
+    top: -9px; left: 20px;
+    background: var(--dust);
+    padding: 0 10px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--rust);
+    letter-spacing: 3px;
+  }
+  .header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+  .header-title {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 38px;
+    font-weight: 700;
+    letter-spacing: 5px;
+    color: var(--sand);
+    text-transform: uppercase;
+    line-height: 1;
+  }
+  .header-sub {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .header-meta {
+    text-align: right;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    line-height: 2;
+  }
+  .header-meta span { color: var(--sand); }
+
+  /* TICKER */
+  .ticker-wrap {
+    border: 1px solid var(--smoke);
+    border-top: 2px solid var(--rust);
+    overflow: hidden;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s 0.1s ease both;
+  }
+  .ticker-inner { display: flex; align-items: center; height: 30px; }
+  .ticker-label {
+    background: var(--rust);
+    color: var(--dust);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    padding: 0 12px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    white-space: nowrap;
+    font-weight: 700;
+  }
+  .ticker-scroll { overflow: hidden; flex: 1; }
+  .ticker-text {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+    display: inline-block;
+    animation: ticker 50s linear infinite;
+    padding-left: 100%;
+  }
+  @keyframes ticker {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+  }
+
+  /* STAT CARDS */
+  .status-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+    animation: fadeIn 0.6s 0.2s ease both;
+  }
+  .stat-card {
+    border: 1px solid var(--smoke);
+    padding: 12px 14px;
+    background: var(--panel);
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .stat-card:hover { border-color: var(--sand); }
+  .stat-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .stat-card.green::after { background: var(--toxic); }
+  .stat-card.warn::after  { background: var(--warn); }
+  .stat-card.red::after   { background: var(--alert); }
+  .stat-card.sand::after  { background: var(--sand); }
+  .stat-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .stat-value { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; line-height: 1; }
+  .stat-card.green .stat-value { color: var(--toxic); }
+  .stat-card.warn  .stat-value { color: var(--warn); }
+  .stat-card.red   .stat-value { color: var(--alert); }
+  .stat-card.sand  .stat-value { color: var(--sand); }
+  .stat-detail { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* PANELS */
+  .panel {
+    border: 1px solid var(--smoke);
+    background: var(--panel);
+    padding: 16px 18px;
+    position: relative;
+    animation: fadeIn 0.6s ease both;
+  }
+  .panel-title {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--smoke);
+  }
+
+  /* GRID LAYOUTS */
+  .grid-2  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .grid-3  { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  .full    { margin-bottom: 12px; }
+
+  /* INTEL BOX */
+  .intel-box {
+    background: rgba(200,169,110,0.05);
+    border: 1px solid var(--smoke);
+    border-left: 3px solid var(--warn);
+    padding: 10px 14px;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--bone);
+    line-height: 1.5;
+  }
+  .intel-box .intel-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--warn);
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+  }
+
+  /* CONDIZIONI OPERATIVE */
+  .thermal-indicator { display: flex; align-items: center; gap: 10px; padding: 6px 0; margin-bottom: 10px; }
+  .thermal-label { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; min-width: 100px; }
+  .thermal-boxes { display: flex; gap: 3px; }
+  .thermal-box { width: 16px; height: 16px; border: 1px solid var(--smoke); }
+  .thermal-box.active { background: var(--alert); border-color: var(--alert); }
+  .thermal-box.warn   { background: var(--warn);  border-color: var(--warn); }
+  .thermal-box.ok     { background: var(--toxic); border-color: var(--toxic); }
+  .thermal-note { font-size: 12px; color: var(--muted); }
+
+  .threat-bar-wrap { margin-bottom: 10px; }
+  .threat-label-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+  .threat-label-row .tl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); letter-spacing: 1px; }
+  .threat-label-row .tv { font-size: 11px; color: var(--sand); font-weight: 600; }
+  .threat-track { height: 5px; background: var(--smoke); }
+  .threat-fill  { height: 100%; }
+  .threat-fill.red  { background: var(--alert); width: 95%; }
+  .threat-fill.warn { background: var(--warn);  width: 90%; }
+  .threat-fill.sand { background: var(--sand);  width: 45%; }
+  .threat-fill.toxic { background: var(--toxic); width: 70%; }
+
+  /* SQUADRE */
+  .squad-list { display: flex; flex-direction: column; gap: 8px; }
+  .squad-item { display: flex; align-items: flex-start; gap: 10px; padding: 10px; border: 1px solid var(--smoke); transition: border-color 0.2s, background 0.2s; }
+  .squad-item:hover { border-color: var(--sand); background: rgba(200,169,110,0.06); }
+  .squad-num { font-family: 'Rajdhani', sans-serif; font-size: 26px; font-weight: 700; color: var(--rust); line-height: 1; min-width: 24px; }
+  .squad-info { flex: 1; }
+  .squad-name { font-weight: 600; font-size: 14px; color: var(--sand); letter-spacing: 1px; }
+  .squad-loc  { font-family: 'Share Tech Mono', monospace; font-size: 10px; color: var(--muted); margin: 2px 0 4px; }
+  .squad-desc { font-size: 12px; color: var(--bone); line-height: 1.4; }
+  .squad-status { font-family: 'Share Tech Mono', monospace; font-size: 9px; padding: 2px 7px; border: 1px solid; align-self: flex-start; white-space: nowrap; letter-spacing: 1px; }
+  .status-ok   { color: var(--toxic); border-color: var(--toxic-dim); }
+  .status-warn { color: var(--warn);  border-color: #6b4105; }
+  .status-crit { color: var(--alert); border-color: #661a1a; }
+  .status-pend { color: var(--muted); border-color: var(--smoke); }
+
+  /* SCOPERTE */
+  .discovery-list { display: flex; flex-direction: column; gap: 8px; }
+  .discovery { display: flex; gap: 12px; padding: 10px; border: 1px solid var(--smoke); align-items: flex-start; transition: border-color 0.2s; }
+  .discovery:hover { border-color: var(--rust); }
+  .disc-icon { font-family: 'Share Tech Mono', monospace; font-size: 20px; color: var(--rust); min-width: 22px; line-height: 1; margin-top: 1px; }
+  .disc-title { font-weight: 600; font-size: 13px; color: var(--sand); margin-bottom: 3px; }
+  .disc-text  { font-size: 12px; color: var(--muted); line-height: 1.4; }
+
+  /* PERSONAGGI */
+  .char-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .char-card { padding: 10px 12px; border: 1px solid var(--smoke); position: relative; overflow: hidden; transition: border-color 0.2s; }
+  .char-card:hover { border-color: var(--sand); }
+  .char-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+  .char-card.ally::before    { background: var(--toxic); }
+  .char-card.neutral::before { background: var(--warn); }
+  .char-card.hostile::before { background: var(--alert); }
+  .char-card.unknown::before { background: var(--muted); }
+  .char-name  { font-family: 'Rajdhani', sans-serif; font-size: 17px; font-weight: 700; color: var(--sand); }
+  .char-role  { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
+  .char-offer { font-size: 12px; color: var(--bone); line-height: 1.4; }
+  .char-badge { display: inline-block; font-family: 'Share Tech Mono', monospace; font-size: 8px; padding: 2px 6px; margin-bottom: 5px; letter-spacing: 1px; border: 1px solid; }
+  .char-card.ally    .char-badge { color: var(--toxic); border-color: var(--toxic-dim); }
+  .char-card.neutral .char-badge { color: var(--warn);  border-color: #6b4105; }
+  .char-card.hostile .char-badge { color: var(--alert); border-color: #661a1a; }
+  .char-card.unknown .char-badge { color: var(--muted); border-color: var(--smoke); }
+
+  /* CONTRATTI */
+  .contract-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .contract-card { padding: 14px 16px; border: 1px solid var(--smoke); }
+  .contract-card.pro  { border-top: 3px solid var(--toxic); }
+  .contract-card.corp { border-top: 3px solid var(--alert); }
+  .contract-name { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: 2px; margin-bottom: 10px; }
+  .contract-card.pro  .contract-name { color: var(--toxic); }
+  .contract-card.corp .contract-name { color: var(--alert); }
+  .contract-row { display: flex; gap: 8px; margin-bottom: 6px; font-size: 13px; }
+  .contract-row .lbl { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--muted); min-width: 85px; letter-spacing: 1px; margin-top: 2px; }
+  .contract-row .val { color: var(--bone); flex: 1; }
+  .consequence { margin-top: 10px; padding: 8px 10px; font-size: 12px; font-style: italic; border-left: 2px solid; color: var(--muted); line-height: 1.4; }
+  .contract-card.pro  .consequence { border-color: var(--toxic); }
+  .contract-card.corp .consequence { border-color: var(--alert); }
+
+  /* ASSET */
+  .asset-list { display: flex; flex-direction: column; gap: 6px; }
+  .asset-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border: 1px solid var(--smoke); font-size: 13px; transition: border-color 0.2s; }
+  .asset-item:hover { border-color: var(--sand); }
+  .asset-dot  { width: 7px; height: 7px; background: var(--sand); flex-shrink: 0; }
+  .asset-name { color: var(--bone); flex: 1; }
+  .asset-tier { font-family: 'Share Tech Mono', monospace; font-size: 9px; color: var(--toxic); border: 1px solid var(--toxic-dim); padding: 2px 6px; letter-spacing: 1px; }
+
+  /* PRIORITÀ */
+  .priority-list { display: flex; flex-direction: column; gap: 6px; }
+  .priority-item { display: flex; gap: 12px; padding: 9px 12px; border: 1px solid var(--smoke); align-items: center; transition: border-color 0.2s, background 0.2s; }
+  .priority-item:hover { border-color: var(--sand); background: rgba(200,169,110,0.04); }
+  .prio-num { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; color: var(--rust); min-width: 20px; line-height: 1; }
+  .prio-text { font-size: 13px; color: var(--bone); }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 20px;
+    padding: 12px 0;
+    border-top: 1px solid var(--smoke);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* PARTIAL WARNING BANNER */
+  .partial-banner {
+    border: 1px solid var(--warn);
+    background: rgba(212,130,10,0.08);
+    padding: 8px 16px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--warn);
+    letter-spacing: 2px;
+    animation: fadeIn 0.6s 0.05s ease both;
+  }
+  .partial-banner::before { content: '⚠'; font-size: 14px; }
+
+  /* ANIMATIONS */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .panel:nth-child(1) { animation-delay: 0.1s; }
+  .panel:nth-child(2) { animation-delay: 0.2s; }
+  .panel:nth-child(3) { animation-delay: 0.3s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 700px) {
+    .grid-2, .grid-3, .contract-grid, .char-grid { grid-template-columns: 1fr; }
+    .status-bar { grid-template-columns: 1fr 1fr; }
+    .header-meta { display: none; }
+    .header-title { font-size: 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="dashboard">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <div>
+        <div class="header-title">Deserto di Empusa</div>
+        <div class="header-sub">MISSIONE "RAINMAKER" ◈ RAPPORTO OPERATIVO POST-AZIONE ◈ SALVAGE UNION</div>
+      </div>
+      <div class="header-meta">
+        DATA: <span>10.05.2026</span><br>
+        TEATRO: <span>03.xx EMPUSA</span><br>
+        SQUADRE: <span>4 / 4 OPERATIVE</span><br>
+        STATO: <span style="color:var(--warn)">RAPPORTO PARZIALE</span><br>
+        CRAWLER: <span>SANCTUARY 02</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PARTIAL BANNER -->
+  <div class="partial-banner">DOCUMENTO PARZIALE — IN ATTESA DEL RAPPORTO DELLA 4ª SQUADRA</div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap">
+    <div class="ticker-inner">
+      <div class="ticker-label">▶ INTEL LIVE</div>
+      <div class="ticker-scroll">
+        <div class="ticker-text">
+          CHIAVE RAINMAKER COMPLETA — ENTRAMBE LE METÀ RECUPERATE ◈ ARCOLOG CONTOUR [03.02] INFILTRATO SENZA COMBATTIMENTO — 5 MECH SOTTRATTI ◈ MINIERA DI RAME [03.03] NEUTRALIZZATA — MINATORI LIBERATI ◈ CONTRATTO CERYS CHIARITO: OBIETTIVO = CONVOGLI CONTOUR AL LAGO [04.05] ◈ ACQUA AVAMPOSTO MERCANTILE PROVIENE DALLA CITTÀ SOMMERSA — CONTROLLO BARONE COLTON ◈ CERYS INTERESSATA AI BARILI CON BATTERI IDROFAGI ◈ NONNO DI CERYS RICORDAVA IL DESERTO PIENO D'ACQUA ◈ 4ª SQUADRA IN AZIONE ALLA MINIERA — DROPBEAR INGAGGIATO ◈ DIVISE CONTOUR RECUPERATE — POTENZIALE USO FUTURO ◈
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="status-bar">
+    <div class="stat-card green">
+      <div class="stat-label">CHIAVE RAINMAKER</div>
+      <div class="stat-value">2/2</div>
+      <div class="stat-detail">Completa — entrambe le metà</div>
+    </div>
+    <div class="stat-card sand">
+      <div class="stat-label">MECH RECUPERATI</div>
+      <div class="stat-value">6+</div>
+      <div class="stat-detail">Arcolog: 5 — Miniera: 1+</div>
+    </div>
+    <div class="stat-card warn">
+      <div class="stat-label">CONTRATTO CERYS</div>
+      <div class="stat-value">!</div>
+      <div class="stat-detail">Termini chiariti — decidere</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">MINATORI LIBERATI</div>
+      <div class="stat-value">✓</div>
+      <div class="stat-detail">Alleati sul campo (temp.)</div>
+    </div>
+  </div>
+
+  <!-- CONTESTO OPERATIVO -->
+  <div class="panel full">
+    <div class="panel-title">◈ CONTESTO OPERATIVO — BRIEFING INIZIALE</div>
+    <div class="intel-box">
+      <div class="intel-label">▶ CHIAVE RAINMAKER — ORIGINE</div>
+      Bob, ingegnere capo di Sanctuary 02, ha armonizzato i dati dei server della Sessione 0 in un dispositivo fisico: una Chiave Rainmaker che risponde se puntata verso il Deserto. Il codice risultava incompleto — ne esistevano altre metà. Il ponte di comando ha confermato: la risonanza massima puntava verso l'Arcolog Contour [03.02].
+    </div>
+    <div class="intel-box" style="border-left-color: var(--muted);">
+      <div class="intel-label" style="color:var(--muted)">▶ VOCI DI CORRIDOIO (MENSA)</div>
+      Dall'Acquitrino di Yanel potrebbero provenire radiazioni anomale (fonte: membro ponte di comando) — L'Avamposto Mercantile sembrerebbe sotto il controllo del Barone Colton.
+    </div>
+    <div style="display:flex; gap:16px; font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--muted); margin-top:4px;">
+      <span>POSIZIONE CRAWLER: <span style="color:var(--sand)">BANDA DI SCORRIDORI [03.04]</span></span>
+      <span>LIMITE TERMICO: <span style="color:var(--alert)">−2 LIVELLI (CALDO ESTREMO)</span></span>
+    </div>
+  </div>
+
+  <!-- SQUADRE + SCOPERTE -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">◈ RAPPORTO SQUADRE</div>
+      <div class="squad-list">
+        <div class="squad-item">
+          <div class="squad-num">1</div>
+          <div class="squad-info">
+            <div class="squad-name">Arcolog Contour</div>
+            <div class="squad-loc">[03.02] — Infiltrazione</div>
+            <div class="squad-desc">Infiltrazione sotto copertura. Seconda metà della Chiave Rainmaker recuperata. 5 mech Contour sottratti dall'hangar. 6 rottami T4. Zero combattimenti.</div>
+          </div>
+          <div class="squad-status status-ok">SUCCESSO TOTALE</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">2</div>
+          <div class="squad-info">
+            <div class="squad-name">Miniera di Rame</div>
+            <div class="squad-loc">[03.03] — Combattimento + Liberazione</div>
+            <div class="squad-desc">Infiltrazione fallita, prigionieri liberati con IED. Minatori liberati e alleati. 7 mech Contour neutralizzati con supporto 4ª Squadra. Mech 4ª Squadra gravemente danneggiati.</div>
+          </div>
+          <div class="squad-status status-warn">SUCCESSO / PERDITE ALLEATE</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">3</div>
+          <div class="squad-info">
+            <div class="squad-name">Avamposto Mercantile</div>
+            <div class="squad-loc">[03.05] — Diplomazia + Combattimento</div>
+            <div class="squad-desc">Contratto Cerys chiarito (convogli al Lago [04.05]). Info geopolitiche raccolte. Intercettati da 4 Gopher — 2 distrutti, 1 telaio recuperato. 2 Gopher in fuga.</div>
+          </div>
+          <div class="squad-status status-ok">RIENTRATA</div>
+        </div>
+        <div class="squad-item">
+          <div class="squad-num">4</div>
+          <div class="squad-info">
+            <div class="squad-name">Miniera di Rame</div>
+            <div class="squad-loc">[03.03] — Supporto alla 2ª Squadra</div>
+            <div class="squad-desc">Coordinamento con la 2ª Squadra. Ingaggio del Dropbear. Mech gravemente danneggiati — rimorchiati al Crawler dai minatori.</div>
+          </div>
+          <div class="squad-status status-pend">RAPPORTO ATTESO</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">◈ SCOPERTE PRINCIPALI</div>
+      <div class="discovery-list">
+        <div class="discovery">
+          <div class="disc-icon">🗝</div>
+          <div>
+            <div class="disc-title">Chiave Rainmaker — Completa</div>
+            <div class="disc-text">La prima metà era già nelle mani di Cassandra. La seconda è stata recuperata dalla 1ª Squadra all'interno del Deposito Precaduta dell'Arcolog Contour [03.02]. La Chiave risponde — destinazione ancora ignota.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">💧</div>
+          <div>
+            <div class="disc-title">Geopolitica dell'acqua — quadro aggiornato</div>
+            <div class="disc-text">L'acqua dell'Avamposto viene dalla Città Sommersa (controllo Barone Colton). Contour rifornisce i propri siti con acqua dal Lago [04.05] tramite convogli. Il conflitto è tra due monopoli idrici — non tra bene e male.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">☣</div>
+          <div>
+            <div class="disc-title">Batteri idrofagi — nuova pista</div>
+            <div class="disc-text">Cerys ignora la storia, ma vuole i barili dell'Oasi [03.01] ed è disposta a pagare. Suo nonno ricordava il deserto pieno d'acqua — il sabotaggio potrebbe essere molto più antico del previsto.</div>
+          </div>
+        </div>
+        <div class="discovery">
+          <div class="disc-icon">⚡</div>
+          <div>
+            <div class="disc-title">Minatori liberati — alleati temporanei</div>
+            <div class="disc-text">I minatori della cava hanno combattuto al fianco di Sanctuary e rimorchiato i mech danneggiati della 4ª Squadra. Natura futura del rapporto ancora da definire.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERSONAGGI -->
+  <div class="panel full">
+    <div class="panel-title">◈ PERSONAGGI CHIAVE</div>
+    <div class="char-grid">
+      <div class="char-card ally">
+        <div class="char-badge">✅ ALLEATO ATTIVO</div>
+        <div class="char-name">Nicholas Sandival</div>
+        <div class="char-role">Pilota veterano indipendente — [03.06] Canyon</div>
+        <div class="char-offer">Officina autosufficiente T3, mech T5/T6. Commercia regolarmente con l'Avamposto Mercantile. Affidabile sul campo — già testato nella sessione precedente.</div>
+      </div>
+      <div class="char-card neutral">
+        <div class="char-badge">🟡 CONTRATTO APERTO</div>
+        <div class="char-name">Cerys</div>
+        <div class="char-role">Braccio destro del Barone Colton — Avamposto Mercantile [03.05]</div>
+        <div class="char-offer">Contratto chiarito: annientare i convogli Contour che trasportano acqua dal Lago [04.05]. Offre rottami + acqua come merce di scambio. Vuole i barili con batteri idrofagi — disposta a pagare ulteriormente.</div>
+      </div>
+      <div class="char-card hostile">
+        <div class="char-badge">🔴 OSTILE — INTERESSI OPPOSTI</div>
+        <div class="char-name">Nara Mash</div>
+        <div class="char-role">Ufficiale Corporazione Contour — Arcolog [03.02]</div>
+        <div class="char-offer">Proposta non ufficiale: eliminare Cerys per aprire la strada al takeover dell'Avamposto. Ricompensa: min. 30 rottami T3. Accettare = monopolio idrico Contour sull'intera regione.</div>
+      </div>
+      <div class="char-card unknown">
+        <div class="char-badge">⚪ FIGURA EMERGENTE</div>
+        <div class="char-name">Barone Colton</div>
+        <div class="char-role">Controllore della Città Sommersa — [06.03] Fortezza di Colton</div>
+        <div class="char-offer">Controlla la fonte idrica dell'Avamposto Mercantile. Il suo conflitto con Contour sembra puramente economico: predominio sulle risorse idriche. Natura e intenzioni verso Sanctuary ancora ignote.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTRATTO -->
+  <div class="panel full">
+    <div class="panel-title">◈ CONTRATTO APERTO — DECISIONE RICHIESTA — I DUE SONO INCOMPATIBILI</div>
+    <div class="contract-grid">
+      <div class="contract-card pro">
+        <div class="contract-name">CONTRATTO CERYS</div>
+        <div class="contract-row"><span class="lbl">CLIENTE</span><span class="val">Avamposto Mercantile (indipendente) — Cerys / Barone Colton</span></div>
+        <div class="contract-row"><span class="lbl">OBIETTIVO</span><span class="val">Annientare i convogli Contour che trasportano acqua dal Lago [04.05] nelle Colline Selvagge</span></div>
+        <div class="contract-row"><span class="lbl">RICOMPENSA</span><span class="val">Quantità di rottami + acqua come merce di scambio + possibile bonus per i barili idrofagi</span></div>
+        <div class="consequence">Conseguenza: l'Avamposto rimane indipendente. Contour perde la sua catena di rifornimento idrico. L'acqua resta accessibile a Sanctuary — ma il Barone Colton consolida il proprio monopolio alternativo.</div>
+      </div>
+      <div class="contract-card corp">
+        <div class="contract-name">CONTRATTO NARA MASH</div>
+        <div class="contract-row"><span class="lbl">CLIENTE</span><span class="val">Corporazione Contour — Nara Mash (accordo non ufficiale)</span></div>
+        <div class="contract-row"><span class="lbl">OBIETTIVO</span><span class="val">Eliminare Cerys, braccio destro del Barone Colton all'Avamposto</span></div>
+        <div class="contract-row"><span class="lbl">RICOMPENSA</span><span class="val">Almeno 30 rottami T3</span></div>
+        <div class="consequence">Conseguenza: Contour acquisisce l'Avamposto Mercantile. Monopolio idrico corporativo. Costo dell'acqua per Sanctuary potenzialmente illimitato e fuori controllo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSET + PRIORITÀ -->
+  <div class="grid-2">
+    <div class="panel">
+      <div class="panel-title">◈ ASSET RECUPERATI — SESSIONE 10.05</div>
+      <div class="asset-list">
+        <div class="asset-item">
+          <div class="asset-dot" style="background:var(--toxic)"></div>
+          <div class="asset-name">Chiave Rainmaker — completa (2ª metà)</div>
+          <div class="asset-tier" style="color:var(--toxic);border-color:var(--toxic-dim)">CHIAVE</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">2× Hussar + 1× Ravager + 2× Dropbear (da Arcolog)</div>
+          <div class="asset-tier">MECH ×5</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">6 rottami (da Deposito Precaduta Arcolog)</div>
+          <div class="asset-tier">T4 ×6</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">Divise Contour (giardiniere + soldato + ingegnere)</div>
+          <div class="asset-tier">COPERTURA</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot"></div>
+          <div class="asset-name">1× telaio Gopher (da scontro con 3ª Squadra)</div>
+          <div class="asset-tier">MECH</div>
+        </div>
+        <div class="asset-item">
+          <div class="asset-dot" style="background:var(--warn)"></div>
+          <div class="asset-name">Mech 4ª Squadra — rimorchiati al Crawler</div>
+          <div class="asset-tier" style="color:var(--warn);border-color:#6b4105">DANNI GRAVI</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">◈ PRIORITÀ PROSSIMA SESSIONE</div>
+      <div class="priority-list">
+        <div class="priority-item">
+          <div class="prio-num">1</div>
+          <div class="prio-text">Utilizzare la Chiave Rainmaker — individuare la destinazione e il significato del segnale</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">2</div>
+          <div class="prio-text">Decidere il contratto — Cerys vs Nara Mash (o esplorare una terza via con il Barone Colton)</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">3</div>
+          <div class="prio-text">Recuperare i barili idrofagi dall'Oasi [03.01] — Cerys è disposta a pagare profumatamente</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">4</div>
+          <div class="prio-text">Riparare i mech della 4ª Squadra — gravemente danneggiati nello scontro con il Dropbear</div>
+        </div>
+        <div class="priority-item">
+          <div class="prio-num">5</div>
+          <div class="prio-text">Investigare le radiazioni anomale segnalate nell'Acquitrino di Yanel</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span>SANCTUARY 02 ◈ SALVAGE UNION ◈ SESSIONE 10.05.2026</span>
+    <span>TEATRO: DESERTO DI EMPUSA ◈ DOCUMENTO PARZIALE — 3/4 SQUADRE</span>
+  </div>
+
+</div>
+</body>
+</html>
