@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il nostro bellissimo Pastrocchio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Outfit:wght@300;400;600&family=Playfair+Display:ital,wght@0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <style>
+        @page {
+            size: A4;
+            margin: 20mm 15mm 20mm 15mm;
+        }
+        
+        body {
+            font-family: 'Outfit', sans-serif;
+            color: #2c2520;
+            background-color: #faf7f2;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+            font-size: 11.5pt;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(243, 156, 18, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 90% 20%, rgba(52, 152, 219, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 50% 80%, rgba(231, 76, 60, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 15% 85%, rgba(46, 204, 113, 0.08) 0%, transparent 40%);
+        }
+
+        /* Cornice artistica ed elegante */
+        .page-border {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 2px solid rgba(184, 93, 59, 0.15);
+            margin: -5mm;
+            pointer-events: none;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 10px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        /* Macchia di colore artistica sotto il titolo */
+        header::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 280px;
+            height: 80px;
+            background: radial-gradient(ellipse, rgba(230, 126, 34, 0.12) 0%, transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 24pt;
+            color: #b85d3b;
+            margin: 0 0 5px 0;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-size: 13pt;
+            color: #7f8c8d;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        p {
+            margin: 0 0 20px 0;
+            text-align: justify;
+            font-weight: 300;
+        }
+
+        p strong {
+            font-weight: 600;
+            color: #b85d3b; /* Colore caldo per evidenziare i pittori */
+        }
+
+        p em {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+
+        .highlight-box {
+            background-color: rgba(184, 93, 59, 0.04);
+            border-left: 3px solid #b85d3b;
+            padding: 12px 18px;
+            margin: 25px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            text-align: center;
+            font-size: 12pt;
+        }
+
+        .highlight-box strong {
+            color: #b85d3b;
+        }
+
+        .footer-sign {
+            margin-top: 40px;
+            text-align: right;
+            font-family: 'Dancing Script', cursive;
+            font-size: 20pt;
+            color: #b85d3b;
+            line-height: 1.2;
+        }
+
+        .footer-sign .label {
+            font-family: 'Outfit', sans-serif;
+            font-size: 10pt;
+            font-weight: 400;
+            color: #7f8c8d;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 5px;
+        }
+
+        /* Stili per la stampa PDF */
+        @media print {
+            body {
+                background-color: #ffffff;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .page-border {
+                border-color: rgba(184, 93, 59, 0.25);
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-border"></div>
+
+<div class="container">
+    <header>
+        <h1>🎨 Il nostro bellissimo "Pastrocchio"</h1>
+        <p class="subtitle">Lettera a un gruppo di artisti straordinari 🧑‍🎨👩‍🎨</p>
+    </header>
+
+    <p>Cari compagni di viaggio, 🌟</p>
+
+    <p>Il sipario è calato sulla nostra prima messa in scena 🎭, eppure nell'aria vibra ancora quell'energia speciale che solo un gruppo unito sa creare.</p>
+
+    <p>Se ci guardiamo indietro, a quei primi mesi di prove, sembra quasi di ripercorrere lo stesso viaggio che il nostro Pittore pasticcione e la sua fida assistente hanno compiuto sul palco. Un viaggio fatto di scoperte, di incontri e, soprattutto, di crescita collettiva. 👣✨</p>
+
+    <p>All’inizio eravamo un po' tutti come davanti a una tela bianca ⬜🖌°. C’era l’incertezza del buttarsi, quel timore silenzioso del <em>"forse non sono capace"</em>, la timidezza di un gruppo che non si conosceva e la paura che gli altri non ci mettessero lo stesso cuore.</p>
+
+    <p>Ma poi, proprio come <strong>Leonardo da Vinci</strong>, abbiamo iniziato a guardare le stelle 🌌✨. Abbiamo messo in discussione le nostre certezze, abbiamo attivato i nostri "marchingegni" interiori ⚙️💡 e abbiamo deciso di metterci in gioco, scoprendo la bellezza ed il <em>"sorriso misterioso"</em> 😏🎨 di ciò che stava prendendo forma.</p>
+
+    <p>Pian piano, una nuova energia ci ha mossi da dentro. Abbiamo capito – grazie ad <strong>Arcimboldo</strong> – che fare arte insieme non significa essere perfetti o convenzionali 🍏🍐. A volte, per fare un naso serve una mela, per un mento una pera, e sì... <em>a volte avanza anche una banana e ci si chiede se possa tornare utile a qualcuno!</em> 🍌🤪</p>
+
+    <p>Abbiamo imparato che ammettere i propri limiti o confidare una perplessità ad un compagno di avventura non ci rende deboli, ma ci unisce 🤝.</p>
+
+    <p>Parlare e condividere la pressione (suddividendone il peso con chi magari per sua indole in quel momento non la sentiva) ha reso il carico di ognuno più leggero. ⚖️❤️</p>
+
+    <p>E che dire degli errori? <strong>Pablo Picasso</strong> ce lo ha gridato forte: <em>"Errore? Che errore? Questo si chiama Cubismo!"</em> 📐🧩. E noi di "cubismo" ne abbiamo fatto tantissimo!</p>
+
+    <p>Abbiamo trasformato in arte ogni battuta dimenticata, ogni postino entrato al suono di <em>"drin drin... ho una lettera per voi... o cacchio, me la sono dimenticata dietro le quinte!"</em> 📮🏃‍♂️, e ogni Pittore convinto che fosse il turno di accogliere <strong>Picasso</strong> quando magari era la volta di <strong>Matisse</strong> 🔄😅. </p>
+
+    <p>Abbiamo riso, riso e ancora riso di noi stessi 😂🤣, scoprendo che la risata è la pennellata più luminosa che si possa dare a una giornata difficile. 🖌️☀️</p>
+
+    <p><strong>Frida Kahlo</strong> ci ha ricordato che l'arte è fatta di emozioni. C’è chi, come la nostra infaticabile assistente, ha usato il Rosso del coraggio 🔴🔥 e il Giallo della felicità 🟡🌻.</p>
+
+    <p>E c’è chi, tra noi, ha attraversato un periodo buio e pesante 🖤, trovando in questo gruppo e in queste prove la linfa vitale per reggere il peso che gravava sul suo cuore 🩹❤️; così come c’è chi ha dovuto fare un passo indietro per via di un imprevisto, ma ha continuato a spendersi per il gruppo in modo diverso. </p>
+
+    <p><strong>Frida</strong> ci ha insegnato che attingere alle proprie emozioni non è debolezza, ma un mezzo per tessere insieme quel filo invisibile che ci connette tutti. 🪡🌸</p>
+
+    <p>Ci abbiamo messo movimento, proprio come voleva <strong>Keith Haring</strong> 🕺💃. Abbiamo ballato, ci siamo agitati e abbiamo portato dinamismo... forse fin troppo!</p>
+
+    <p>Come quando l'assistente e il pittore sono caduti a terra e, in un momento di puro <em>"dinamismo acrobatico"</em> 🤸‍♂️ (e un ginocchio un po' troppo entusiasta), si è quasi sfiorata la rottura del legamento crociato posteriore del povero Pittore 🦵💥.</p>
+
+    <p>Ma anche lì, tra una battuta persa (<em>"L'arte è gioia, l'arte è... cazzo, com'era?"</em> 🤔🗯️) abbiamo capito che il divertimento era la nostra forza. 🎉</p>
+
+    <p>Infine, <strong>Henri Matisse</strong> ci ha ricordato che l'arte è gioia e colore 🌈🎨. Anche quando i nervi della nostra regista sono stati messi a dura prova: <em>"Le prove, Leonardo che non c'è mai, i balletti, il cavalletto, i tecnici, le luci, i bui... oh mio Dio troppe cose!"</em> 🤯, venendo salvata solo dall'apparizione miracolosa di una gigantesca pizza 🍕😍.</p>
+
+    <p>Tra un <em><strong>"me oui"</strong></em>, un <em><strong>"Sacrebleu"</strong></em>, un <em><strong>"Cordon Bleu"</strong></em> e un coro di <em><strong>"sac à poche"</strong></em> 🥖, siamo arrivati alla fine.</p>
+
+    <p><strong>Matisse</strong> ci ha lasciato forse l'insegnamento più grande: ognuno di noi ha dentro di sé la propria arte. </p>
+
+    <p>Ognuno ha portato il proprio talento trasformandolo in colore 🎨, i propri limiti trasformandoli in risorsa per il gruppo, in altre parole... la propria unicità. </p>
+
+    <p>E in fondo, nel nostro genere – quello dei pasticci, delle risate, del sostegno reciproco e del "pastrocchio" – siamo gli artisti migliori del mondo. 🏆🖌️</p>
+
+    <div class="highlight-box">
+        Ma <strong>l'opera più importante</strong>, quella che credo ci porteremo nel cuore 🥰❤️, è la stessa che abbiamo dipinto piano piano, ognuno nella propria mente, durante tutte queste settimane di fatica, e che spero oggi ciascuno sia riuscito a realizzare:<br><br>
+        <strong>il sorriso meraviglioso apparso sul viso dei nostri bimbi e delle nostre bimbe</strong> 👧👦 (compresa la mia Maria Adele) mentre assistevano al frutto dei nostri sforzi seduti su quelle sedie vecchie e polverose 🏫🧒.<br><br>
+        È proprio per quel sorriso che abbiamo dipinto questo nostro capolavoro. 🖼️💖
+    </div>
+
+    <p>Grazie di cuore a tutti. Siete stati un'opera d'arte spettacolare. 🎨👏🌟</p>
+
+    <div class="footer-sign">
+        <div class="label">Sempre a vostra disposizione,</div>
+        il vostro 🎨 Pittore Pasticcione 🎨
+    </div>
+</div>
+
+</body>
+</html>
