@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Il Richiamo di Orlo — Antelia</title>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=UnifrakturMaguntia&display=swap');
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            padding: 35px 18px;
+            color: #1c1308;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(255,255,255,.18), transparent 30%),
+                radial-gradient(circle at 80% 90%, rgba(80,40,10,.12), transparent 35%),
+                linear-gradient(135deg, #cdbb9a 0%, #e0d0b1 48%, #c9b893 100%);
+            font-family: 'UnifrakturMaguntia', Georgia, serif;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .parchment-container {
+            width: 100%;
+            max-width: 820px;
+            margin: 0 auto;
+            padding: 55px 64px 60px;
+            position: relative;
+            background:
+                linear-gradient(rgba(238, 223, 190, .90), rgba(226, 208, 170, .93)),
+                repeating-linear-gradient(
+                    0deg,
+                    rgba(90, 58, 18, .025) 0,
+                    rgba(90, 58, 18, .025) 1px,
+                    transparent 1px,
+                    transparent 4px
+                );
+            border: 1px solid rgba(90, 58, 18, .32);
+            box-shadow:
+                0 10px 35px rgba(35, 22, 8, .25),
+                inset 0 0 50px rgba(82, 52, 18, .10);
+        }
+
+        .parchment-container::before,
+        .parchment-container::after {
+            content: "";
+            position: absolute;
+            left: 18px;
+            right: 18px;
+            height: 1px;
+            background: rgba(90, 58, 18, .30);
+        }
+
+        .parchment-container::before {
+            top: 15px;
+        }
+
+        .parchment-container::after {
+            bottom: 15px;
+        }
+
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 22px;
+            border-bottom: 2px solid #5a3a12;
+            text-align: center;
+        }
+
+        .eyebrow {
+            margin-bottom: 8px;
+            color: #5a3a12;
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .htitle {
+            margin: 0;
+            color: #8e1c12;
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 3.7rem;
+            line-height: 1.05;
+            letter-spacing: 3px;
+            font-weight: 700;
+            text-transform: uppercase;
+            text-shadow: 1px 1px 0 rgba(255,255,255,.35);
+        }
+
+        .subtitle {
+            margin-top: 12px;
+            color: #315d34;
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .letter-content {
+            width: 100%;
+        }
+
+        .letter-content p {
+            margin: 0 0 25px;
+            color: #261706;
+            font-size: 1.55rem;
+            line-height: 1.78;
+            text-align: justify;
+            text-indent: 30px;
+            text-shadow: 0.5px 0.5px 1px rgba(255,255,255,.35);
+        }
+
+        .letter-content p.first-para {
+            text-indent: 0;
+        }
+
+        .letter-content p.first-para::first-letter {
+            float: left;
+            margin-top: 5px;
+            margin-right: 9px;
+            color: #4a2f0f;
+            font-size: 3.8rem;
+            line-height: .78;
+            font-weight: bold;
+        }
+
+        .pause {
+            display: block;
+            margin: 7px 0 28px;
+            text-align: center;
+            color: #5a3a12;
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 1rem;
+            letter-spacing: 5px;
+        }
+
+        .emphasis {
+            color: #7c170f;
+            font-family: 'Cinzel', Georgia, serif;
+            font-weight: 700;
+            letter-spacing: .4px;
+        }
+
+        .final-line {
+            margin-top: 34px;
+            padding-top: 24px;
+            border-top: 1px solid rgba(90, 58, 18, .45);
+            text-align: center;
+            color: #4a2f0f;
+            font-family: 'Cinzel', Georgia, serif;
+            font-size: 1.08rem;
+            letter-spacing: 1px;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 12mm;
+            }
+
+            body {
+                padding: 0;
+                background: #d4c5a9;
+            }
+
+            .parchment-container {
+                max-width: none;
+                min-height: 100vh;
+                border: none;
+                box-shadow: none;
+                padding: 35px 45px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 0;
+            }
+
+            .parchment-container {
+                min-height: 100vh;
+                padding: 40px 24px 45px;
+                border-left: none;
+                border-right: none;
+            }
+
+            .htitle {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            .subtitle {
+                font-size: .95rem;
+                letter-spacing: 1.5px;
+            }
+
+            .letter-content p {
+                font-size: 1.2rem;
+                line-height: 1.65;
+                text-align: left;
+                margin-bottom: 20px;
+            }
+
+            .letter-content p.first-para::first-letter {
+                font-size: 3rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="parchment-container">
+        <header class="header-container">
+            <div class="eyebrow">Introduzione alla storia</div>
+            <h1 class="htitle">Il Richiamo di Orlo</h1>
+            <div class="subtitle">La scomparsa di Antelia</div>
+        </header>
+
+        <section class="letter-content">
+            <p class="first-para">
+                La natura selvaggia.
+            </p>
+
+            <p>
+                Bella da togliere il fiato… e spietata da spezzarlo.
+            </p>
+
+            <p>
+                Un luogo capace di mostrare meraviglie che nessun uomo potrebbe mai creare e,
+                un istante dopo, ricordarti quanto fragile possa essere la vita di chi vi mette piede.
+            </p>
+
+            <p>
+                Qui, dove spesso sembra vigere una legge semplice e antica: sopravvive il più forte.
+            </p>
+
+            <p>
+                Qui, dove la pietà è rara, l'altruismo ancora più raro… e la sopravvivenza viene prima di ogni altra cosa.
+            </p>
+
+            <p>
+                Eppure, a volte, accadono cose strane.
+            </p>
+
+            <p>
+                Piccole eccezioni che, proprio perché così insolite, riescono quasi a lasciare increduli.
+            </p>
+
+            <p>
+                Un lupo che, davanti a un coniglio inerme, decide di non affondare i denti.
+            </p>
+
+            <p>
+                Un gabbiano che smette di cacciare e resta a osservare un piccolo pesce guizzare tra le basse acque di un porto.
+            </p>
+
+            <p>
+                Sono gesti semplici.
+            </p>
+
+            <p>
+                Forse privi di significato.
+            </p>
+
+            <p>
+                O forse no.
+            </p>
+
+            <span class="pause">✦ &nbsp; ✦ &nbsp; ✦</span>
+
+            <p>
+                Perché la storia che oggi ci porta su questa strada parla, in fondo, proprio di questo.
+            </p>
+
+            <p>
+                Di un atto di altruismo.
+            </p>
+
+            <span class="pause">… FORSE …</span>
+
+            <p>
+                Una coppia ha chiesto il vostro aiuto.
+            </p>
+
+            <p>
+                Vi è stata promessa una ricompensa, è vero.
+            </p>
+
+            <p>
+                Ma ciò che vi hanno raccontato va oltre il semplice desiderio di riempirvi le tasche d'oro.
+            </p>
+
+            <p>
+                La loro figlia, <span class="emphasis">Antelia</span>, è scomparsa.
+            </p>
+
+            <p>
+                O, per meglio dire… è stata vista per l'ultima volta in un luogo dove loro non possono avventurarsi.
+            </p>
+        </section>
+
+        <div class="final-line">
+            Una storia di paura, speranza… e di ciò che si nasconde oltre il limite del conosciuto.
+        </div>
+    </main>
+</body>
+</html>
